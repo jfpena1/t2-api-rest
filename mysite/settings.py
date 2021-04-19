@@ -24,10 +24,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-h_(aaovqcaw@yanjdddz8uapsj&_(hm!$e&1fa@5t31&anbej&'
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-h_(aaovqcaw@yanjdddz8uapsj&_(hm!$e&1fa@5t31&anbej&')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = config('DJANGO_DEBUG', default=True, cast=bool)
+
 
 ALLOWED_HOSTS = ['*']
 
@@ -78,10 +79,21 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default=config('DATABASE_URL')
+#     )
+# }
+
 DATABASES = {
-    'default': dj_database_url.config(
-        default=config('DATABASE_URL')
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.path.join(BASE_DIR, 'db.postgresql'),
+        'USER': 'dqcbtonjetinmf',
+        'PASSWORD': 'c732e692040bed9d6176f4c909a8afbd0f38d37391c29da93c4f96498850ae08',
+        'HOST': 'ec2-54-242-43-231.compute-1.amazonaws.com',
+        'PORT': '5432',
+    }
 }
 
 
