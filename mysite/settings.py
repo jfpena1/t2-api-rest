@@ -36,6 +36,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'music.apps.MusicConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -86,14 +87,23 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # }
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': 'dec6uthch14vl8',
+    #     'USER': 'dqcbtonjetinmf',
+    #     'PASSWORD': 'c732e692040bed9d6176f4c909a8afbd0f38d37391c29da93c4f96498850ae08',
+    #     'HOST': 'ec2-54-242-43-231.compute-1.amazonaws.com',
+    #     'PORT': '5432',
+    # },
+
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.path.join(BASE_DIR, 'db.postgresql'),
-        'USER': 'dqcbtonjetinmf',
-        'PASSWORD': 'c732e692040bed9d6176f4c909a8afbd0f38d37391c29da93c4f96498850ae08',
-        'HOST': 'ec2-54-242-43-231.compute-1.amazonaws.com',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'jfpena123',
+        'HOST': 'localhost',
         'PORT': '5432',
-    }
+    },
 }
 
 
@@ -133,13 +143,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
