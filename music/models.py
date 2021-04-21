@@ -1,5 +1,7 @@
 from django.db import models
 
+# en heroku migraciones:
+#heroku run python manage.py migrate
 
 class Artist(models.Model):
     id = models.CharField(max_length=22, primary_key=True)
