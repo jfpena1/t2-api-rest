@@ -7,8 +7,8 @@ class Artist(models.Model):
     id = models.CharField(max_length=22, primary_key=True)
     name = models.CharField(max_length=200)
     age = models.IntegerField()
-    albums = models.CharField(max_length=200, default="")
-    tracks = models.CharField(max_length=200, default="")
+    albums_url = models.CharField(max_length=200, default="")
+    tracks_url = models.CharField(max_length=200, default="")
     url = models.CharField(max_length=200, default="")
 
     def __str__(self):
@@ -19,8 +19,8 @@ class Album(models.Model):
     name = models.CharField(max_length=200)
     genre = models.CharField(max_length=200)
     artist_id = models.ForeignKey(Artist, on_delete=models.CASCADE, default="")
-    artist = models.CharField(max_length=200, default="") #url
-    tracks = models.CharField(max_length=200, default="")
+    artist_url = models.CharField(max_length=200, default="") #url
+    tracks_url = models.CharField(max_length=200, default="")
     url = models.CharField(max_length=200, default="")
 
     def __str__(self):
@@ -32,9 +32,9 @@ class Track(models.Model):
     duration = models.IntegerField()
     times_played = models.IntegerField()
     artist_id = models.ForeignKey(Artist, on_delete=models.CASCADE, default="")
-    artist = models.CharField(max_length=200, default="") #url
+    artist_url = models.CharField(max_length=200, default="") #url
     album_id = models.ForeignKey(Album, on_delete=models.CASCADE, default="")
-    album = models.CharField(max_length=200, default="") #url
+    album_url = models.CharField(max_length=200, default="") #url
     url = models.CharField(max_length=200, default="")
 
     def __str__(self):

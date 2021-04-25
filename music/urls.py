@@ -6,6 +6,15 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('artists', views.artists, name='artists'),
     path('artists/<str:artist_id>', views.artist, name='artist'),
+    path('artists/<str:artist_id>/<str:detail>', views.artist_details, name='artist_details'),
+    path('artists/<str:artist_id>/albums/play', views.artist_play_tracks, name='artist_play_tracks'),
+    path('albums', views.albums, name='albums'),
+    path('albums/<str:album_id>', views.album, name='album'),
+    path('albums/<str:album_id>/<str:detail>', views.album_tracks, name='album_tracks'),
+    path('albums/<str:album_id>/tracks/play', views.album_play_tracks, name='album_play_tracks'),
+    path('tracks', views.tracks, name='tracks'),
+    path('tracks/<str:track_id>', views.track, name='track'),
+    path('tracks/<str:track_id>/play', views.track_play, name='track_play')
 ]
 
 '''
