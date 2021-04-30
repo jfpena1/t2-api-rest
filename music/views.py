@@ -72,14 +72,13 @@ def artist(request, artist_id):
         
 @api_view(['GET', 'POST'])
 def artist_details(request, artist_id, detail):
-    try:
-        selected_artist = Artist.objects.get(pk=artist_id)
-        data = JSONParser().parse(request)    
-        print(f"Artist: {selected_artist}")
-    except:
-        return JsonResponse({'message': 'The artist does not exist'}, status=status.HTTP_404_NOT_FOUND)
-
     if request.method == 'GET':
+        try:
+            selected_artist = Artist.objects.get(pk=artist_id)
+            data = JSONParser().parse(request)    
+            print(f"Artist: {selected_artist}")
+        except:
+            return JsonResponse({'message': 'The artist does not exist'}, status=status.HTTP_404_NOT_FOUND)
         if detail == "albums":
             return get_artist_albums(selected_artist)
 
@@ -87,6 +86,12 @@ def artist_details(request, artist_id, detail):
             return get_artist_tracks(selected_artist)
         
     elif request.method == 'POST':
+        try:
+            selected_artist = Artist.objects.get(pk=artist_id)
+            data = JSONParser().parse(request)    
+            print(f"Artist: {selected_artist}")
+        except:
+            return JsonResponse({'message': 'The artist does not exist'}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
         return create_artist_album(data, selected_artist, request)
             
 @api_view(['PUT'])
@@ -105,7 +110,7 @@ def artist_play_tracks(request, artist_id):
         track.save()
     return JsonResponse(
         {'message': 
-        f'Tracks were played!'}, 
+        'Tracks were played!'}, 
         safe=False, 
         status=status.HTTP_200_OK
     )
@@ -148,9 +153,6 @@ def create_artist_album(data, selected_artist, request):
 
     return JsonResponse(album_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-def edit_artist_reproductions(request):
-    pass
-
 ################################# CRUD Album #################################
 
 @api_view(['GET'])
@@ -159,9 +161,9 @@ def albums(request):
     albums_serializer = AlbumSerializer(all_albums, many=True)
     print(str(albums_serializer))
     return JsonResponse(albums_serializer.data, safe=False, 
-    status=status.HTTP_204_NO_CONTENT)
+    status=status.HTTP_200_OK)
 
-@api_view(['GET', 'POST', 'DELETE'])
+@api_view(['GET', 'DELETE'])
 def album(request, album_id):
     print("Album view")
     try:
@@ -219,7 +221,7 @@ def album_play_tracks(request, album_id):
         track.save()
     return JsonResponse(
         {'message': 
-        f'Tracks were played!'}, 
+        'Tracks were played!'}, 
         safe=False, 
         status=status.HTTP_200_OK
     )
