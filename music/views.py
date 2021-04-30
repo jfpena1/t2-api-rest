@@ -269,10 +269,9 @@ def track(request, track_id):
     if request.method == "GET":
         print("GET de track wewqdewhgh")
         print(selected_track)
-        track_serializer = TrackSerializer(selected_track, 
-        many=True)
+        track_serializer = TrackSerializer(selected_track)
         print(track_serializer)
-        return JsonResponse(track_serializer, 
+        return JsonResponse(track_serializer.data, 
         status=status.HTTP_200_OK)
 
     elif request.method == "DELETE":
