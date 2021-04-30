@@ -29,7 +29,7 @@ class Album(models.Model):
 class Track(models.Model):
     id = models.CharField(max_length=22, primary_key=True)
     name = models.CharField(max_length=200)
-    duration = models.IntegerField()
+    duration = models.FloatField()
     times_played = models.IntegerField()
     artist_id = models.ForeignKey(Artist, on_delete=models.CASCADE, default="")
     artist_url = models.CharField(max_length=200, default="") #url

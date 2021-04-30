@@ -51,7 +51,7 @@ def verify_inputs(dict_data, model_type):
     elif model_type == "Album":
         body_attributes = {"name": str, "genre": str}
     elif model_type == "Track":
-        body_attributes = {"name": str, "duration": int}
+        body_attributes = {"name": str, "duration": float}
     
     print(set(body_attributes.keys()))
     print(set(dict_data.keys()))

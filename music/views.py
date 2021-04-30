@@ -33,9 +33,11 @@ def artists(request):
 
         encoded_id = encode_b64(artist_data, "Artist")
         # Check if exists already:
-        if Artist.objects.filter(pk=encoded_id).first() is not None:
+        searched_artist = Artist.objects.filter(pk=encoded_id).first()
+        if searched_artist is not None:
+            serialized_artist = ArtistSerializer(searched_artist)
             print("artista existe")
-            return JsonResponse({ 'message': "Artista ya existe!"}, status=status.HTTP_409_CONFLICT)
+            return JsonResponse(serialized_artist.data, status=status.HTTP_409_CONFLICT)
         
         albums, tracks, self_url = get_urls(encoded_id, "Artist", request)
         artist_data["id"] = encoded_id
@@ -64,10 +66,9 @@ def artist(request, artist_id):
         return JsonResponse(artist_serializer.data, safe=False, 
         status=status.HTTP_200_OK)
 
-    elif request.method == 'DELETE': 
-        name = selected_artist.name
+    elif request.method == 'DELETE':
         selected_artist.delete()
-        return JsonResponse({'message': f'Artist {name} was deleted successfully!'}, 
+        return JsonResponse({'message': f'Artist was deleted successfully!'}, 
         status=status.HTTP_204_NO_CONTENT)
         
 @api_view(['GET', 'POST'])
@@ -139,10 +140,12 @@ def create_artist_album(data, selected_artist, request):
 
     data["artist_id"] = selected_artist.id
     encoded_id = encode_b64(data, "Album")
-
-    if Album.objects.filter(id=encoded_id).first() is not None:
+    
+    searched_album = Album.objects.filter(id=encoded_id).first()
+    if searched_album is not None:
+        serialized_album = AlbumSerializer(searched_album)
         print(f"Album ya existe")
-        return JsonResponse({'message': "Album ya existe!"}, 
+        return JsonResponse(serialized_album.data, 
         status=status.HTTP_409_CONFLICT)
 
     album_serializer = create_album_serializer(data, request)
@@ -181,7 +184,7 @@ def album(request, album_id):
     elif request.method == 'DELETE':
         name = selected_album.name
         selected_album.delete()
-        return JsonResponse({'message': f'Album {name} was deleted successfully!'}, 
+        return JsonResponse({'message': f'Album was deleted successfully!'}, 
         status=status.HTTP_204_NO_CONTENT)
 
 @api_view(['GET', 'POST'])
@@ -244,10 +247,11 @@ def create_album_track(data, selected_album, request):
     data["artist_id"] = selected_album.artist_id.id   
     data["album_id"] = selected_album.id
     encoded_id = encode_b64(data, "Track")
-
-    if Track.objects.filter(id=encoded_id).first() is not None:
+    searched_track = Track.objects.filter(id=encoded_id).first()
+    if searched_track is not None:
+        serialized_track = TrackSerializer(searched_track)
         print(f"Track ya existe")
-        return JsonResponse({ 'message': f'Track ya existe!'}, status=status.HTTP_409_CONFLICT)
+        return JsonResponse(serialized_track.data, status=status.HTTP_409_CONFLICT)
 
     track_serializer = create_track_serializer(data, request)
     if track_serializer.is_valid():
