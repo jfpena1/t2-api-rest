@@ -87,7 +87,7 @@ def artist_details(request, artist_id, detail):
             return get_artist_tracks(selected_artist)
         
     elif request.method == 'POST':
-        create_artist_album(data, selected_artist, request)
+        return create_artist_album(data, selected_artist, request)
             
 @api_view(['PUT'])
 def artist_play_tracks(request, artist_id):
@@ -127,6 +127,7 @@ def get_artist_tracks(selected_artist):
     status=status.HTTP_200_OK)
 
 def create_artist_album(data, selected_artist, request):
+    print("hi")
     if not verify_inputs(data, "Album"):
         return JsonResponse({'message':"Inputs de album invalidos"}, 
         status=status.HTTP_400_BAD_REQUEST)
@@ -136,7 +137,7 @@ def create_artist_album(data, selected_artist, request):
 
     if Album.objects.filter(id=encoded_id).first() is not None:
         print(f"Album ya existe")
-        return JsonResponse({ 'message': f"Album ya existe!"}, 
+        return JsonResponse({'message': "Album ya existe!"}, 
         status=status.HTTP_409_CONFLICT)
 
     album_serializer = create_album_serializer(data, request)
@@ -170,7 +171,7 @@ def album(request, album_id):
         status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        album_serializer = ArtistSerializer(selected_album)
+        album_serializer = AlbumSerializer(selected_album)
         print(str(album_serializer))
         return JsonResponse(album_serializer.data, safe=False, 
         status=status.HTTP_200_OK)
@@ -183,17 +184,22 @@ def album(request, album_id):
 
 @api_view(['GET', 'POST'])
 def album_tracks(request, album_id, detail):
-    try:
-        selected_album = Album.objects.get(pk=album_id)
-        print(f"Album: {selected_album}")
-    except:
-        return JsonResponse({'message': 'The album does not exist'}, 
-        status=status.HTTP_404_NOT_FOUND)
-
     if request.method == 'GET':
+        try:
+            selected_album = Album.objects.get(pk=album_id)
+            print(f"Album: {selected_album}")
+        except:
+            return JsonResponse({'message': 'The album does not exist'}, 
+            status=status.HTTP_404_NOT_FOUND)
         return get_album_tracks(selected_album)
         
     elif request.method == 'POST':
+        try:
+            selected_album = Album.objects.get(pk=album_id)
+            print(f"Album: {selected_album}")
+        except:
+            return JsonResponse({'message': 'The album does not exist'}, 
+            status=status.HTTP_422_UNPROCESSABLE_ENTITY)
         data = JSONParser().parse(request)
         return create_album_track(data, selected_album, request)
 
@@ -206,7 +212,7 @@ def album_play_tracks(request, album_id):
         return JsonResponse({'message': 'The album does not exist'}, 
         status=status.HTTP_404_NOT_FOUND)
     
-    album_tracks = Track.objects.filter(album_id=selected_album)
+    album_tracks = Track.objects.filter(album_id=selected_album.id)
     print(album_tracks)
     for track in album_tracks:
         track.times_played += 1
