@@ -75,8 +75,7 @@ def artist(request, artist_id):
 def artist_albums(request, artist_id):
     if request.method == 'GET':
         try:
-            selected_artist = Artist.objects.get(pk=artist_id)
-            data = JSONParser().parse(request)    
+            selected_artist = Artist.objects.get(pk=artist_id)    
             print(f"Artist: {selected_artist}")
         except:
             return JsonResponse({'message': 'The artist does not exist'}, status=status.HTTP_404_NOT_FOUND)
@@ -96,8 +95,7 @@ def artist_albums(request, artist_id):
 def artist_tracks(request, artist_id):
     if request.method == 'GET':
         try:
-            selected_artist = Artist.objects.get(pk=artist_id)
-            data = JSONParser().parse(request)    
+            selected_artist = Artist.objects.get(pk=artist_id)  
             print(f"Artist: {selected_artist}")
         except:
             return JsonResponse({'message': 'The artist does not exist'}, status=status.HTTP_404_NOT_FOUND)
