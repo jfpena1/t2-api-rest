@@ -72,7 +72,7 @@ def artist(request, artist_id):
         status=status.HTTP_204_NO_CONTENT)
         
 @api_view(['GET', 'POST'])
-def artist_details(request, artist_id, detail):
+def artist_albums(request, artist_id):
     if request.method == 'GET':
         try:
             selected_artist = Artist.objects.get(pk=artist_id)
@@ -80,11 +80,8 @@ def artist_details(request, artist_id, detail):
             print(f"Artist: {selected_artist}")
         except:
             return JsonResponse({'message': 'The artist does not exist'}, status=status.HTTP_404_NOT_FOUND)
-        if detail == "albums":
-            return get_artist_albums(selected_artist)
 
-        elif detail == "tracks":
-            return get_artist_tracks(selected_artist)
+        return get_artist_albums(selected_artist)
         
     elif request.method == 'POST':
         try:
@@ -94,6 +91,18 @@ def artist_details(request, artist_id, detail):
         except:
             return JsonResponse({'message': 'The artist does not exist'}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
         return create_artist_album(data, selected_artist, request)
+
+@api_view(['GET'])
+def artist_tracks(request, artist_id):
+    if request.method == 'GET':
+        try:
+            selected_artist = Artist.objects.get(pk=artist_id)
+            data = JSONParser().parse(request)    
+            print(f"Artist: {selected_artist}")
+        except:
+            return JsonResponse({'message': 'The artist does not exist'}, status=status.HTTP_404_NOT_FOUND)
+
+        return get_artist_tracks(selected_artist)
             
 @api_view(['PUT'])
 def artist_play_tracks(request, artist_id):
